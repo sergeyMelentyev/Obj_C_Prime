@@ -17,24 +17,16 @@ NSMutableArray *mutArray = [[NSMutableArray alloc] init];		// create an empty in
 [mutArray addObject:objOne]; [mutArray insertObject:objTwo atIndex:0];
 [mutArray removeObjectAtIndex:0];
 
-
-BNRperson *person = [[BNRperson alloc] init];
-        [person setWeightInKilos:96];       // message sending for instances
-        person.weightInK = 100;     // dot notation for props
-
+// CUSTOM CLASSES
 @interface BNRperson : NSObject {
     int _weightInKilos;     // instance variable cannot be read/wright from outside
 }
 -(int) weightInKilos;       // instance methods can read/wright instance variables
 -(void) setWeightInKilos:(int) weight;
-
 @property (nonatomic, readonly) int name;       // property attributes, read only
 @property (nonatomic) int weightInK;        // props are the same as instances, without methods
-
 -(float) bodyMassIndex;
 @end
-  
-#import "BNRperson.h"
 
 @implementation BNRperson
 -(int) weightInKilos {      // instance methods can read/wright instance variables
@@ -43,8 +35,13 @@ BNRperson *person = [[BNRperson alloc] init];
 -(void) setWeightInKilos:(int) weight {
     _weightInKilos = weight;
 }
-
 -(float) bodyMassIndex {
     return [self weightInK] / [self weightInK];
 }
 @end
+
+BNRperson *person = [[BNRperson alloc] init];
+[person setWeightInKilos:96];       // message sending for instances
+person.weightInK = 100;     // dot notation for props
+
+// 
