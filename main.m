@@ -1,5 +1,5 @@
 #import <Foundation/Foundation.h>
-// USE Xcode -> Help -> Documentation and API reference
+// Use Xcode -> Help -> Documentation and API reference
 
 // NSSTRING 
 NSString *string = @"";		// create an instance of NSString obj with literal syntax
@@ -18,6 +18,7 @@ NSMutableArray *mutArray = [[NSMutableArray alloc] init];		// create an empty in
 [mutArray removeObjectAtIndex:0];
 
 // CUSTOM CLASSES
+@class BNRAsset;		// the same as #import but with less information, faster
 @interface BNRperson : NSObject {
     int _weightInKilos;     // instance variable cannot be read/wright from outside
 }
@@ -36,6 +37,7 @@ NSMutableArray *mutArray = [[NSMutableArray alloc] init];		// create an empty in
     _weightInKilos = weight;
 }
 -(float) bodyMassIndex {
+    float normalBMI = [super bodyMassIndex];		// call super class method
     return [self weightInK] / [self weightInK];
 }
 @end
