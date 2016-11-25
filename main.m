@@ -3,12 +3,39 @@
 // Use Xcode -> Product -> Profile for leaks checking
 
 /*** COMPARISON ***/
-// equal objects have the sane letters in the same order
-// identical objects if they are the same objects
+// equal objects have the same letters in the same order
+// identical if objects are the same
+
+/*** NSNULL ***/
+// nil can not be added to any collection
+[array addObject:[NSNull null]];
+
+/*** CONSTANTS ***/
+#define PI 3.14159265
+extern NSString *const NSLocaleCurrentCode;		// constant defined in some other place
+NSString *const NSLocaleCurrentCode = @"currency";		// some other place
 
 /*** NSNUMBER ***/
 // can not be mutable, create a new obj if need a new number
+[array addObject:@4];		// literal syntax, convert int or float primitive into NSNumber
 [NSNumber numberWithInt:1];
+
+/*** NSValue ***/
+// use as pointer to struct primitive
+NSPoint *somePoint = NSMakePoint(100, 100);
+NSValue *pointValue = [NSValue valueWithPoint: somePoint];
+[array addObject: pointValue];
+
+/*** ENUM***/
+// a set of constants, only one is allowed
+typedef enum {
+	BlenderSpeedStir = 1, BlenderSpeedChop = 2
+} BlenderSpeed;
+BlenderSpeed speed;
+
+typedef NS_ENUM(char, BlenderSpeed) {		// preprocessor macro that takes 2 args (data type, name)
+	BlenderSpeedStir, BlenderSpeedChop
+};
 
 /*** NSSTRING NSMUTABLESTRING***/
 NSString *string = @"";		// create an instance of NSString obj with literal syntax
@@ -94,4 +121,37 @@ BNRperson *person = [[BNRperson alloc] init];
 [person setWeightInKilos:96];       // message sending for instances
 person.weightInK = 100;     // dot notation for props
 
-// 
+/*** NSERROR READING WRITING DATA ***/
+NSError *error;		// declare a pointerto an NSError obj, will only be created if error will acquire
+BOOL success = [string wrireToFile:@"tmp/name.txt"
+						atomically: YES
+							encoding: NSUTF8StringEncoding
+								error: &error];		// passing address of pointer var
+if (!success)
+	NSLog(@"error", [error localizedDescription]);
+
+// reading string from file
+NSString *str = [[NSString alloc] initWithContentsOfFile:@"tmp/name.txt"
+									encoding: NSASCIIStringEncoding
+										error: &error];
+if (!str)
+	NSLog(@"error", [error localizedDescription])
+
+// reading data from file
+NSData *readData = [NSData dataWithContentsOfFile:@"tmp/name.png"];
+
+// reading data from url
+NSURL *url = [NSUrl URLWithString:@"http"];
+NSURLRequest *request = [NSURLRequest requestWithURL:url];
+NSError *error = nil;
+NSData *data = [NSURLConnection sendSynchronousRequest:request
+										returningResponse:NULL 
+											error:&error];
+BOOL written = [data writeToFile:@"temp/name.png"
+						options:0		// NSDataWriteAtomic for writing as a whole file
+							error:&error];
+
+// function that will return the right direction
+// https://developer.apple.com/reference/foundation/nssearchpathdirectory
+NSArray *desktops = NSSearchPathForDirectoriesInDomains(NSdesktopDirectory, NSUserDomainMask, YES);
+NSString *desktopPath = desktops[0];
