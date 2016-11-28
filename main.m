@@ -81,10 +81,35 @@ NSDictionary *numOfMoons = @{@"Earth": @1, @"Mars": @2};		//literal syntax, NSSt
 NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobos"]};		// nested collections
 [dictName setObject:objName forkey:@"keyName"];
 
+/*** CALLBACKS ***/
+[[NSRunLoop currentRunLoop] run];
+// Target-action, sending one callback to one object
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0
+							target:anyInstanceName selector:@selector(anyMethodName:)
+								userInfo:nil repeats:YES];
+// Helper object with protocols, sending an assortment of callbacks to one object
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+NSURL *url = [NSURL URLWithString:@"http"];
+NSURLRequest *request = [NSURLRequest requestWithURL:url];
+NSURLConnection *fetchConn = [[NSURLConnection alloc] initWithRequest:request
+								delegate:anyInstanceName startImmediately:YES];
+// Notifications, register as observer
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+[[NSNotificationCenter defaultCenter] addObserver:anyInstanceName
+								selector:@selector(anyMethodName:)
+									name:NSSystemTimeZoneDidChangeNotification object:nil];
+// Blocks
+^{ NSLog(@"Logic here"); }
+^(int varName){ NSLog(@"Logic here"); return varName; }
+NSArray *origional = @[@"String"]; NSMutableArray *devowelized = [NSMutableArray array];
+NSArray *vowels = @[@"t", @"r"];
+
+
 /*** CUSTOM CLASSES ***/
 // Header file.h, the only interface that is visible
 @class BNRAsset;		// the same as #import but with less information, faster
-@interface BNRperson : NSObject {
+@interface BNRperson: NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
     int _weightInKilos;     // instance variable cannot be read/wright from outside
 }
 -(int) weightInKilos;       // instance methods can read/wright instance variables
@@ -94,6 +119,10 @@ NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobo
 @property (nonatomic, weak) BNRAsset *assets;		// weak reference does not imply ownership
 -(float) bodyMassIndex;		// instance method
 +(int) bodyMass;		// class method
+// in order to implement callback methods, need to respond to as the protocol delegates
+-(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;	// called after each chunk
+-(void) connectionDidFinishLoading:(NSURLConnection *)connection;		// called after last chunk
+-(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error;	// if fails
 @end
 
 // Implementation file.m
@@ -112,6 +141,7 @@ NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobo
 }
 -(float) bodyMassIndex {
     float normalBMI = [super bodyMassIndex];		// call super class method
+    static NSDateFormatter * date = nil;		// all instances of class will have the same data
     return [self weightInK] / [self weightInK];
 }
 @end
@@ -150,7 +180,6 @@ NSData *data = [NSURLConnection sendSynchronousRequest:request
 BOOL written = [data writeToFile:@"temp/name.png"
 						options:0		// NSDataWriteAtomic for writing as a whole file
 							error:&error];
-
 // function that will return the right direction
 // https://developer.apple.com/reference/foundation/nssearchpathdirectory
 NSArray *desktops = NSSearchPathForDirectoriesInDomains(NSdesktopDirectory, NSUserDomainMask, YES);
