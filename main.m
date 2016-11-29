@@ -100,11 +100,27 @@ BNRperson *anyInstanceName = [[BNRperson alloc]init];
 								selector:@selector(anyMethodName:)
 									name:NSSystemTimeZoneDidChangeNotification object:nil];
 // Blocks
-^{ NSLog(@"Logic here"); }
-^(int varName){ NSLog(@"Logic here"); return varName; }
+_block int counter = 0;		// modifier for an external var to change it withing a block
+int (^newBlock)(int argName, int argLast);		// declare block variable
+newBlock = ^(int argName, int argLast) {		// assign block to variable
+	int returnArg = argName + argLast; 
+	return returnArg; }
+int anyVar = newBlock(1,2);		// call newBlock like a function
+
 NSArray *origional = @[@"String"]; NSMutableArray *devowelized = [NSMutableArray array];
 NSArray *vowels = @[@"t", @"r"];
-
+void (^devower)(id, NSUInteger, BOOL *);	// block variable declaration
+devower = ^(id string, NSUInteger i, BOOL *stop) {	// compose a block and assign it to the var
+	NSMutableString *newString = [NSMutableString stringWithString: string];
+	for(NSString *s in origional) {
+		NSRange fullRange = NSMakeRange(0, [newString length]);
+		[newString replaceOccurrencesOfString:s
+						withString:@"" options: NSCaseInsensitiveSearch range:fullRange];
+	}
+	[devowelized addObject:newString];
+};		// end of block assigment
+void (^devower)(id, NSUInteger, BOOL *) = ^(id string, NSUInteger i, BOOL *stop) {}	// short hand
+[origional enumerateObjectsUsingBlock:devower];		//passing in a block
 
 /*** CUSTOM CLASSES ***/
 // Header file.h, the only interface that is visible
@@ -150,6 +166,19 @@ NSArray *vowels = @[@"t", @"r"];
 BNRperson *person = [[BNRperson alloc] init];
 [person setWeightInKilos:96];       // message sending for instances
 person.weightInK = 100;     // dot notation for props
+
+/*** PROTOCOLS ***/
+@protocol UITableViewDataSource <NSObject>
+@required
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+@optional
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath;
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath 
+		toIndexPath:(NSIndexPath *)destinationIndexPath;
+@end
 
 /*** NSERROR READING WRITING DATA ***/
 NSError *error;		// declare a pointerto an NSError obj, will only be created if error will acquire
