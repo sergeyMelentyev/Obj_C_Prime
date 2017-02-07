@@ -1,11 +1,28 @@
-#import <Foundation/Foundation.h>
 // Use Xcode -> Product -> Profile for leaks checking
+
+#import <Foundation/Foundation.h>	// check if file already imported
+
+int valueName;	// global variable, can be access from everywhere
+static int valueName;	// global variable int the declared file, cannot be access from another file
+
+
+		/*** PRIMITIVE VALUES ***/
+char a;		// 8 bits
+short b;		// 16 bits (depending)
+int c;		// 32 bits (depending)
+long d;		// 32 or 64 bits (depending)
+long long e;	// 64 bits
 
 
 		/*** CONSTANTS ***/
 #define PI 3.14159265
 extern NSString *const NSLocaleCurrentCode;	// constant defined in some other place
 NSString *const NSLocaleCurrentCode = @"currency";	// some other place
+
+
+		/*** EQUAL ***/
+// identical means same address and in string same letters in same order
+// equal means in string same letters in same order
 
 
 		/*** ENUM***/
@@ -30,26 +47,38 @@ typedef NS_ENUM(char, BlenderSpeed) {	// preprocessor macro that takes 2 args (d
 [array addObject:@4];	// literal syntax, convert primitive into NSNumber
 
 
-		/*** NSValue ***/
-// use as pointer to struct primitive
+		/*** NSVALUE ***/
+// hold any scalar types (int, float, and char) or pointers, structures, and object id references
 NSPoint *somePoint = NSMakePoint(100, 100);
 NSValue *pointValue = [NSValue valueWithPoint: somePoint];
 [array addObject: pointValue];
 
 
+		/*** ID ***/
+id delegate;	// create a pointer without knowing exacly kind of obj the pointer will refer to
+
+
+		/*** HEAP MEMORY ***/
+int *startOfBuffer = malloc(1000 * sizeof(int));	// pointer to address of first int num in buffer
+
+typedef struct { int weight; } Person;
+int bodyMass(Person *p) { return p->weight; }
+Person *me = (Person *)malloc(sizeof(Person));
+me->weight = 98; free(me); me = NULL;
+
+
 		/*** NSSTRING ***/
-// immutable object
+NSString *str = @"str";	// string literal
 @property(readonly) NSUInteger length;
 @property(readonly, copy) NSString *lowercaseString;
 @property(readonly, copy) NSString *uppercaseString;
 @property(readonly) double doubleValue;	// float, int, integer, long, bool
 
-- (instancetype)initWithCharacters:(const unichar *)characters length:(NSUInteger)length;
-- (instancetype)initWithString:(NSString *)aString;
-
 + (instancetype)stringWithFormat:(NSString *)format, ...;
 + (instancetype)stringWithCharacters:(const unichar *)characters length:(NSUInteger)length;
 + (instancetype)stringWithString:(NSString *)string;
+- (instancetype)initWithCharacters:(const unichar *)characters length:(NSUInteger)length;
+- (instancetype)initWithString:(NSString *)aString;
 
 - (NSString *)stringByAppendingFormat:(NSString *)format, ...;
 - (NSString *)stringByAppendingString:(NSString *)aString;
@@ -168,56 +197,37 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF beginswith 'T'"
 - (void)setSet:(NSSet<ObjectType> *)otherSet;	// empties set then add each obj contained in otherSet
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 		/*** NSARRAY ***/
-// Immutable ordered collection, holds a list of pointers to other objects, cannot be sorted
-NSArray *array = @[objOne, objTwo];	// literal syntaxx
+// immutable ordered collection, holds a list of pointers to other objects, cannot be sorted
+NSArray *array = @[objOne, objTwo];	// literal syntax
 for (NSDate *d in array) {}	// fast enumeration
 
--(NSArray *)filteredArrayUsingPredicate:(NSPredicate *)predicate;	// create a new filtered array
-NSPredicate *predicate = [NSPredicate predicateWithFormat: @"holder.valueOfAssets > 70"];
-NSArray *filteredArray = [fullArray filteredArrayUsingPredicate: predicate];
+
 
 
 		/*** NSMUTABLEARRAY ***/
-// Mutable ordered collection can be sorted
+// mutable ordered collection can be sorted
 NSMutableArray *mutArray = [NSMutableArray array];	// create an empty instance
-NSMutableArray *mutArray = [[NSMutableArray alloc] init];	// create an empty instance
-[mutArray addObject:objOne]; [mutArray insertObject:objTwo atIndex:0];
-[mutArray removeObjectAtIndex:0];
--(NSUInteger)indexOfObject:(id)anobject;	// check each object for isEqual:anObject
--(NSUInteger)indexOfObjectIdenticalTo:(id)anObject;	// check each obj == anObject
-
--(void)sortUsingDescriptors:(NSArray *)sortDescriptors;	// sorting method
-NSSortDescriptor *last = [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending: YES];
-NSSortDescriptor *first = [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending: YES];
-[mutArray sortUsingDescriptors: @[first, last]];
-
--(void)filterUsingPredicate:(NSPredicate *)predicate;	// filtering method
+NSMutableArray *mutArray = [[NSMutableArray alloc] init];	// create and init an empty instance
+[mutArray addObject:@2];	// literal syntex, create the instance of NSNumber and add to the array
 
 
-		/*** NSDICTIONARY NSMUTABLEDICTIONARY ***/
-// Unordered collection of key-value pares
+
+
+		/*** NSDICTIONARY ***/
+// unordered collection of key-value pares
 NSDictionary *numOfMoons = @{@"Earth": @1, @"Mars": @2};	//literal syntax, NSString keys, NSNumber values
 NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobos"]};	// nested collections
-[dictName setObject:objName forkey:@"keyName"];
+
+
+
+		/*** NSMUTABLEDICTIONARY ***/
+
 
 
 		/*** CALLBACKS ***/
-[[NSRunLoop currentRunLoop] run];
 // Target-action, sending one callback to one object
+[[NSRunLoop currentRunLoop] run];
 BNRperson *anyInstanceName = [[BNRperson alloc]init];
 NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0
 							target:anyInstanceName selector:@selector(anyMethodName:)
@@ -233,7 +243,9 @@ BNRperson *anyInstanceName = [[BNRperson alloc]init];
 [[NSNotificationCenter defaultCenter] addObserver:anyInstanceName
 								selector:@selector(anyMethodName:)
 									name:NSSystemTimeZoneDidChangeNotification object:nil];
-// Blocks
+		
+
+		/*** BLOCKS ***/
 _block int counter = 0;	// modifier for an external var to change it withing a block
 int (^newBlock)(int argName, int argLast);	// declare block variable
 newBlock = ^(int argName, int argLast) {	// assign block to variable
@@ -257,43 +269,39 @@ void (^devower)(id, NSUInteger, BOOL *) = ^(id string, NSUInteger i, BOOL *stop)
 [origional enumerateObjectsUsingBlock:devower];	//passing in a block
 
 
-		/*** CUSTOM CLASSES ***/
-// Header file.h, the only interface that is visible
+		/*** CLASSES ***/
+// header file.h visible interface
 @class BNRAsset;	// the same as #import but with less information, faster
-@interface BNRperson: NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
+
+@interface BNRperson: NSObject {
     int _weightInKilos;	// instance variable cannot be read/wright from outside
 }
--(int) weightInKilos;	// instance methods can read/wright instance variables
--(void) setWeightInKilos:(int) weight;
+
 @property (nonatomic, readonly) int name;	// property attributes, read only
 @property (nonatomic) int weightInK;	// props are the same as instances, without methods
 @property (nonatomic, weak) BNRAsset *assets;	// weak reference does not imply ownership
--(float) bodyMassIndex;	// instance method
+
+-(int) weightInKilos;	// instance methods can read/wright instance variables
+-(void) setWeightInKilos:(int) weight;
+-(float) bodyMassIndex;
 +(int) bodyMass;	// class method
-// in order to implement callback methods, need to respond to as the protocol delegates
--(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;	// called after each chunk
--(void) connectionDidFinishLoading:(NSURLConnection *)connection;	// called after last chunk
--(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error;	// if fails
+
 @end
 
-// Implementation file.m
+// implementation file.m
 @interface BNRperson () {	// class extension for private declarations, not inherited by subclass
 	NSMutableArray *_assets;
 }
 @property (nonatomic) int officeAlarmCode;
 @end
 
-@implementation BNRperson	// class implementation
--(int) weightInKilos {	// instance methods can read/wright instance variables
-    return _weightInKilos;
-}
--(void) setWeightInKilos:(int) weight {
-    _weightInKilos = weight;
-}
+@implementation BNRperson
+-(int) weightInKilos { return _weightInKilos; }
+-(void) setWeightInKilos:(int) weight { _weightInKilos = weight; }
 -(float) bodyMassIndex {
     float normalBMI = [super bodyMassIndex];	// call super class method
     static NSDateFormatter * date = nil;	// all instances of class will have the same data
-    return [self weightInK] / [self weightInK];
+    return [self weightInK] / [self weightInK];	// instance address
 }
 @end
 
@@ -304,10 +312,18 @@ person.weightInK = 100;	// dot notation for props
 
 
 		/*** PROTOCOLS ***/
+@interface BNRperson: NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
+// in order to implement callback methods, need to respond to as the protocol delegates
+-(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data;	// called after each chunk
+-(void) connectionDidFinishLoading:(NSURLConnection *)connection;	// called after last chunk
+-(void) connection:(NSURLConnection *)connection didFailWithError:(NSError *)error;	// if fails
+}
+
 @protocol UITableViewDataSource <NSObject>
 @required
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+
 @optional
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -317,7 +333,15 @@ person.weightInK = 100;	// dot notation for props
 @end
 
 
-		/*** NSERROR READING WRITING DATA ***/
+
+		/*** NSUSERDEFAULTS ***/
+		/*** NSUSERNOTIFICATION ***/
+		/*** NSUSERNOTIFICATIONACTION ***/
+		/*** NSUSERNOTOFICAtIONCENTER ***/
+
+
+
+		/*** READING WRITING DATA ***/
 NSError *error;	// declare a pointerto an NSError obj, will only be created if error will acquire
 BOOL success = [string wrireToFile:@"tmp/name.txt"
 						atomically: YES
@@ -354,44 +378,28 @@ NSString *desktopPath = desktops[0];
 
 
 
+
 /*
 NSBundle
 NSCache
 NSCoder
 NSData, NSMutableData
-NSDictionary, NSMutableDictionary
-NSPointerArray
-NSPointerFunctions
 NSEnumerator
 NSError
 NSIndexPath
 NSJSONSerialization
-NSMutableURLRequest
+
 NSNotification
 NSNotificationCenter
 NSNotificationQueue
+
 NSPredicate
 NSSortDescriptor
+
 NSStream
 NSURL
 NSURLCache
 NSURLConnection
 NSURLSession
+
 NSUUID
-NSUserDefaults
-NSUserNotification
-NSUserNotificationAction
-NSUserNotificationCenter
-NSValue
-
-
-
-
-
-
-
-
-
-
-
-
