@@ -1,6 +1,6 @@
 // Use Xcode -> Product -> Profile for leaks checking
 
-#import <Foundation/Foundation.h>	// check if file already imported
+#import <Foundation/Foundation.h>	// check if file already included
 
 int valueName;	// global variable, can be access from everywhere
 static int valueName;	// global variable int the declared file, cannot be access from another file
@@ -203,15 +203,11 @@ NSArray *array = @[objOne, objTwo];	// literal syntax
 for (NSDate *d in array) {}	// fast enumeration
 
 
-
-
 		/*** NSMUTABLEARRAY ***/
 // mutable ordered collection can be sorted
 NSMutableArray *mutArray = [NSMutableArray array];	// create an empty instance
 NSMutableArray *mutArray = [[NSMutableArray alloc] init];	// create and init an empty instance
 [mutArray addObject:@2];	// literal syntex, create the instance of NSNumber and add to the array
-
-
 
 
 		/*** NSDICTIONARY ***/
@@ -220,53 +216,7 @@ NSDictionary *numOfMoons = @{@"Earth": @1, @"Mars": @2};	//literal syntax, NSStr
 NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobos"]};	// nested collections
 
 
-
 		/*** NSMUTABLEDICTIONARY ***/
-
-
-
-		/*** CALLBACKS ***/
-// Target-action, sending one callback to one object
-[[NSRunLoop currentRunLoop] run];
-BNRperson *anyInstanceName = [[BNRperson alloc]init];
-NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0
-							target:anyInstanceName selector:@selector(anyMethodName:)
-								userInfo:nil repeats:YES];
-// Helper object with protocols, sending an assortment of callbacks to one object
-BNRperson *anyInstanceName = [[BNRperson alloc]init];
-NSURL *url = [NSURL URLWithString:@"http"];
-NSURLRequest *request = [NSURLRequest requestWithURL:url];
-NSURLConnection *fetchConn = [[NSURLConnection alloc] initWithRequest:request
-								delegate:anyInstanceName startImmediately:YES];
-// Notifications, register as observer
-BNRperson *anyInstanceName = [[BNRperson alloc]init];
-[[NSNotificationCenter defaultCenter] addObserver:anyInstanceName
-								selector:@selector(anyMethodName:)
-									name:NSSystemTimeZoneDidChangeNotification object:nil];
-		
-
-		/*** BLOCKS ***/
-_block int counter = 0;	// modifier for an external var to change it withing a block
-int (^newBlock)(int argName, int argLast);	// declare block variable
-newBlock = ^(int argName, int argLast) {	// assign block to variable
-	int returnArg = argName + argLast; 
-	return returnArg; }
-int anyVar = newBlock(1,2);	// call newBlock like a function
-
-NSArray *origional = @[@"String"]; NSMutableArray *devowelized = [NSMutableArray array];
-NSArray *vowels = @[@"t", @"r"];
-void (^devower)(id, NSUInteger, BOOL *);	// block variable declaration
-devower = ^(id string, NSUInteger i, BOOL *stop) {	// compose a block and assign it to the var
-	NSMutableString *newString = [NSMutableString stringWithString: string];
-	for(NSString *s in origional) {
-		NSRange fullRange = NSMakeRange(0, [newString length]);
-		[newString replaceOccurrencesOfString:s
-						withString:@"" options: NSCaseInsensitiveSearch range:fullRange];
-	}
-	[devowelized addObject:newString];
-};
-void (^devower)(id, NSUInteger, BOOL *) = ^(id string, NSUInteger i, BOOL *stop) {}	// short hand
-[origional enumerateObjectsUsingBlock:devower];	//passing in a block
 
 
 		/*** CLASSES ***/
@@ -376,6 +326,48 @@ NSArray *desktops = NSSearchPathForDirectoriesInDomains(NSdesktopDirectory, NSUs
 NSString *desktopPath = desktops[0];
 
 
+		/*** CALLBACKS ***/
+// target-action, sending one callback to one object
+[[NSRunLoop currentRunLoop] run];
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0
+							target:anyInstanceName selector:@selector(anyMethodName:)
+								userInfo:nil repeats:YES];
+// Helper object with protocols, sending an assortment of callbacks to one object
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+NSURL *url = [NSURL URLWithString:@"http"];
+NSURLRequest *request = [NSURLRequest requestWithURL:url];
+NSURLConnection *fetchConn = [[NSURLConnection alloc] initWithRequest:request
+								delegate:anyInstanceName startImmediately:YES];
+// Notifications, register as observer
+BNRperson *anyInstanceName = [[BNRperson alloc]init];
+[[NSNotificationCenter defaultCenter] addObserver:anyInstanceName
+								selector:@selector(anyMethodName:)
+									name:NSSystemTimeZoneDidChangeNotification object:nil];
+		
+
+		/*** BLOCKS ***/
+_block int counter = 0;	// modifier for an external var to change it withing a block
+int (^newBlock)(int argName, int argLast);	// declare block variable
+newBlock = ^(int argName, int argLast) {	// assign block to variable
+	int returnArg = argName + argLast; 
+	return returnArg; }
+int anyVar = newBlock(1,2);	// call newBlock like a function
+
+NSArray *origional = @[@"String"]; NSMutableArray *devowelized = [NSMutableArray array];
+NSArray *vowels = @[@"t", @"r"];
+void (^devower)(id, NSUInteger, BOOL *);	// block variable declaration
+devower = ^(id string, NSUInteger i, BOOL *stop) {	// compose a block and assign it to the var
+	NSMutableString *newString = [NSMutableString stringWithString: string];
+	for(NSString *s in origional) {
+		NSRange fullRange = NSMakeRange(0, [newString length]);
+		[newString replaceOccurrencesOfString:s
+						withString:@"" options: NSCaseInsensitiveSearch range:fullRange];
+	}
+	[devowelized addObject:newString];
+};
+void (^devower)(id, NSUInteger, BOOL *) = ^(id string, NSUInteger i, BOOL *stop) {}	// short hand
+[origional enumerateObjectsUsingBlock:devower];	//passing in a block
 
 
 
