@@ -19,20 +19,15 @@ typedef NS_ENUM(char, BlenderSpeed) {	// preprocessor macro that takes 2 args (d
 };
 
 
-		/*** COMPARISON ***/
-// equal objects have the same letters in the same order
-// identical if objects are the same
-
-
 		/*** NSNULL OBJECT ***/
-// nil can not be added to any collection
-[array addObject:[NSNull null]];
+// define singleton obj used to represent null in collection objects (which don’t allow nil values)
++ (NSNull *)null; [array addObject:[NSNull null]];
 
 
-		/*** NSNUMBER ***/
-// can not be mutable, create a new obj if need a new number
-[array addObject:@4];	// literal syntax, convert int or float primitive into NSNumber
-[NSNumber numberWithInt:1];
+		/*** NSNUMBER OBJECT ***/
+// immutable obj
++ (NSNumber *)numberWithInt:(int)value;	// bool, char, double, float, int, NSInteger, long, short ...
+[array addObject:@4];	// literal syntax, convert primitive into NSNumber
 
 
 		/*** NSValue ***/
@@ -40,10 +35,6 @@ typedef NS_ENUM(char, BlenderSpeed) {	// preprocessor macro that takes 2 args (d
 NSPoint *somePoint = NSMakePoint(100, 100);
 NSValue *pointValue = [NSValue valueWithPoint: somePoint];
 [array addObject: pointValue];
-
-
-		/*** C STRING ***/
-char *str;
 
 
 		/*** NSSTRING ***/
@@ -175,6 +166,19 @@ NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF beginswith 'T'"
 - (void)minusSet:(NSSet<ObjectType> *)otherSet;	// remove each obj in otherSet from the receiving if present
 - (void)intersectSet:(NSSet<ObjectType> *)otherSet;	// remove from set each obj that isn’t in otherSet
 - (void)setSet:(NSSet<ObjectType> *)otherSet;	// empties set then add each obj contained in otherSet
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 		/*** NSARRAY ***/
@@ -346,3 +350,48 @@ BOOL written = [data writeToFile:@"temp/name.png"
 // https://developer.apple.com/reference/foundation/nssearchpathdirectory
 NSArray *desktops = NSSearchPathForDirectoriesInDomains(NSdesktopDirectory, NSUserDomainMask, YES);
 NSString *desktopPath = desktops[0];
+
+
+
+
+/*
+NSBundle
+NSCache
+NSCoder
+NSData, NSMutableData
+NSDictionary, NSMutableDictionary
+NSPointerArray
+NSPointerFunctions
+NSEnumerator
+NSError
+NSIndexPath
+NSJSONSerialization
+NSMutableURLRequest
+NSNotification
+NSNotificationCenter
+NSNotificationQueue
+NSPredicate
+NSSortDescriptor
+NSStream
+NSURL
+NSURLCache
+NSURLConnection
+NSURLSession
+NSUUID
+NSUserDefaults
+NSUserNotification
+NSUserNotificationAction
+NSUserNotificationCenter
+NSValue
+
+
+
+
+
+
+
+
+
+
+
+
