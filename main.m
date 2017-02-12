@@ -220,45 +220,35 @@ NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobo
 
 
 		/*** CLASSES ***/
-// header file.h visible interface
-@class BNRAsset;	// the same as #import but with less information, faster
 
-@interface BNRperson: NSObject {
-    int _weightInKilos;	// instance variable cannot be read/wright from outside
+// header file
+@interface Person : NSObject {
+    NSString *privateField;	// private instance variable
 }
-
-@property (nonatomic, readonly) int name;	// property attributes, read only
-@property (nonatomic) int weightInK;	// props are the same as instances, without methods
-@property (nonatomic, weak) BNRAsset *assets;	// weak reference does not imply ownership
-
--(int) weightInKilos;	// instance methods can read/wright instance variables
--(void) setWeightInKilos:(int) weight;
--(float) bodyMassIndex;
-+(int) bodyMass;	// class method
-
+@property (nonatomic, strong) NSString *publicField;    // public property attr
+-(NSString*) privateField;	// custom getter method for private instance var
+-(void) setPrivateField:(NSString*)name;	// custom setter method for private instance var
 @end
 
-// implementation file.m
-@interface BNRperson () {	// class extension for private declarations, not inherited by subclass
-	NSMutableArray *_assets;
-}
-@property (nonatomic) int officeAlarmCode;
+// implementation file
+@interface Person()
+@property (strong, nonatomic) NSString *privateProp;	// private property attr
 @end
 
-@implementation BNRperson
--(int) weightInKilos { return _weightInKilos; }
--(void) setWeightInKilos:(int) weight { _weightInKilos = weight; }
--(float) bodyMassIndex {
-    float normalBMI = [super bodyMassIndex];	// call super class method
-    static NSDateFormatter * date = nil;	// all instances of class will have the same data
-    return [self weightInK] / [self weightInK];	// instance address
+@implementation Person
+@synthesize publicField, privateProp;    // make sure getter / setter implemented for props
+-(NSString*) privateField {
+    return privateField;
+}
+-(void) setPrivateField:(NSString*)name {
+    privateField = name;    // access to private instance var
+}
+-(void) anyMethodName:(NSString*)name {
+    self.publicField = name;    // access to public prop attr
+    publicField = name;    // access to public prop attr (auto created insctance var name)
 }
 @end
 
-// executable file.m
-BNRperson *person = [[BNRperson alloc] init];
-[person setWeightInKilos:96];	// message sending for instances
-person.weightInK = 100;	// dot notation for props
 
 
 		/*** PROTOCOLS ***/
