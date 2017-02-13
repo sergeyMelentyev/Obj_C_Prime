@@ -237,6 +237,17 @@ NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobo
 
 @implementation Person
 @synthesize publicField, privateProp;    // make sure getter / setter implemented for props
+
+-(id) initWithName:(NSString*)name andAge:(NSInteger)age {    // custom constructor
+    self.publicField = name;
+    return [self initWithAge:age];
+}
+-(id) initWithAge:(NSInteger)age {
+    if (self = [super init])
+        self.age = age;
+    return self;
+}
+
 -(NSString*) privateField {
     return privateField;
 }
@@ -248,7 +259,6 @@ NSDictionary *numOfMoons = @{@"Earth": @[@"Luna"], @"Mars": @[@"Deimos", @"Phobo
     publicField = name;    // access to public prop attr (auto created insctance var name)
 }
 @end
-
 
 
 		/*** PROTOCOLS ***/
